@@ -137,6 +137,81 @@ git checkout ff1badc05e00be6bb018bf3e5705ba672e20821f
 
 ### 4. Cómo llega un script al navegador
 
+El **DOM** es la representación que hace el navegador de un documento HTML.
+
+#### DOMContentLoaded
+
+El navegador interpreta el archivo HTML y cuando termina de transformarlo al DOM se dispara el event `DOMContentLoaded` lo que significa que todo el documento está disponible para ser manipulado. Sin embargo cuando se dispara `DOMContentLoaded` los recursos como imágenes, videos, css, etc. aún no están cargados.
+
+#### Ejecución de scripts externos y embebidos
+
+Todo script que carguemos en nuestra página tiene un llamado y una ejecución. Si el script esta dentro de nuestra página, la carga del DOM se detiene hasta terminar la petición y la ejecución del script, terminada la ejecución se continúa con la carga del DOM.
+
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+    </head>
+    <body>
+        <script>
+            alert('Hello World!')
+            //Cuando el interprete llege al script
+            //ejecutará el script y detendrá la carga del DOM
+            //terminada la ejecución continua con la carga del DOM
+        </script>
+        <main>
+            <article>
+                <p>This is a html document</p>
+            </article>
+        </main>
+    </body>
+</html>
+```
+
+Para modificar este comportamiento podemos usar peticiones asíncronas, las cuales van a permitir que la carga del DOM no se vea interrumpida mientras se hace la petición y ejecución de script ya sean externos o embebidos.
+
+Tanto con **async** como con **defer** podemos hacer llamados asíncronos pero tiene sus diferencias:
+
+`async`: Con async podemos hacer la petición de forma asíncrona y no vamos a detener la carga del DOM, cuando la petición se completa en ese momento se detiene la carga del DOM y empieza la ejecución del script, terminada la ejecución del script continúa la carga del DOM.
+
+```html
+<head>
+    <script async src="https://..."></script>
+</head>
+<body>
+    <p>
+        This is a website
+    </p>
+</body>
+```
+
+`defer`: La petición es igual asíncrona como en el async pero va a deferir la ejecución del JavasCript hasta el final, después de que se cargue todo el DOM.
+
+```html
+<head>
+    <script defer src="https://..."></script>
+</head>
+<body>
+    <p>
+        This is a website
+    </p>
+</body>
+```
+
+Hay que tener en cuenta que cuando carga una página y se encuentra un script a ejecutar toda la carga se detiene. Por eso se recomienda agregar tus scripts justo antes de cerrar el body para que todo el documento esté disponible.
+
+```html
+<head>
+</head>
+<body>
+    <p>
+        This is a website
+    </p>
+    <script src='#'></script>
+</body>
+```
+
 ### 5. Scope
 
 ### 6. Closures
