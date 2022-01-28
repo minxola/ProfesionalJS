@@ -1,0 +1,23 @@
+{
+  "name": "profesionaljs",
+  "version": "1.0.0",
+  "description": "Curso Profesional de JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/minxola/ProfesionalJS.git"
+  },
+  "keywords": [],
+  "author": "minxola <reminxola69@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/minxola/ProfesionalJS/issues"
+  },
+  "homepage": "https://github.com/minxola/ProfesionalJS#readme",
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
+}
