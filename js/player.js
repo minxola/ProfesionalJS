@@ -1,18 +1,21 @@
-const video = document.querySelector('video');
-const button = document.querySelector('button');
-
 function MediaPlayer(config){
-    this.media = config.el;
+    this.media = config.item;
 }
 
 MediaPlayer.prototype.play = function(){
+    this.media.play();
+}
+
+MediaPlayer.prototype.pause = function(){
+    this.media.pause();
+}
+
+MediaPlayer.prototype.togglePlay = function(){
     if(this.media.paused){
-        this.media.play();
+        this.play();
     } else {
-        this.media.pause();
+        this.pause();
     }
 }
 
-const player = new MediaPlayer({el: video});
-
-button.onclick = () => player.play();
+export default MediaPlayer;

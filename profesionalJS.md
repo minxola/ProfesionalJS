@@ -214,7 +214,162 @@ Hay que tener en cuenta que cuando carga una página y se encuentra un script a 
 
 ### 5. Scope
 
-### 6. Closures
+El scope, ámbito o alcance es el contexto actual de ejecución, en el cual los valores y expresiones son “visibles” y pueden ser referenciados, si una variable u otra expresión no esta en el **“contexto actual de ejecución”** **(current scope)**, entonces estas no están disponibles para su uso. Los **scopes - alcances** también pueden tener una jerarquía de manera que los scopes de menor jerarquía tienen accesos a los scopes de mayor jerarquía pero no a la inversa.
+
+Una función sirve como una **clausura - closure** en JavaScript esto significa que una función crea un **scope - contexto de ejecución**, entonces no se puede acceder a variables definidas dentro de una función desde afuera de esa función, ni desde otras funciones
+
+Un **scope** puede heredar sus variables y expresiones hacia sus hijos pero los hijos no pueden heredar su scope a los padres.
+
+#### Global Scope
+
+Variables disponibles de forma global, se usa la palabra `var`, son accesibles por todos los scripts que se cargan en la página y se declaran fuera de una función o bloque. Aquí hay mucho riesgo de sobreescritura.
+
+```js
+var x = 'Hello';
+var sayMessage = () => {
+    console.log(x); //se accede a x porque es global
+}
+```
+
+También sucede cuando traemos código a través de un CDN, la función de jQuery `$` queda de manera global y podría ser sobre escrita por otra función con el mismo nombre.
+
+```html
+<script src='https://unpkg.com/jquery@3.3.1/dist/jquery.js'></script>
+```
+
+#### Function Scope
+
+Variables declaradas dentro de una función utilizando var sólo visibles dentro de ella misma (incluyendo los argumentos que se pasan a la función).
+
+```js
+//SCOPE DE FUNCIÓN
+var message = 'Hello friends'; //scope global
+var sayMessage = (message) => {
+    console.log(message);
+}
+
+//El argumento 'message' es Function Scope
+//El console.log accede al argumento, y no a global var message
+sayMessage('Hola'); //Hola
+```
+
+Otro caso de function scope es:
+
+```js
+function printNumbers (){
+    for(var i = 0; i < 10; i++){
+        setTimeout(()=> {
+            console.log(i);
+        }, 200);
+    }
+}
+printNumbers(); //10 10 ...10 (10 veces)
+```
+
+Esto sucede porque *JavaScript* toma `var` y lo declara con alcance de función.
+
+```js
+function printNumbers (){
+    var i; //Declaración con function scope
+    for(i = 0; i < 10; i++){
+        setTimeout(()=> {
+            console.log(i);
+        }, 200);
+    }
+}
+printNumbers(); //10 10 ...10 (10 veces)
+```
+
+Para solucionar esto se puede usar también el *Alcance de función*.
+
+```js
+function printNumbers(){
+    for(var i = 0; i < 10; i++){
+        function eventuallyPrintNumber(n){
+            setTimeout(() => {
+                console.log(n);
+            }, 1000)
+        }
+        eventuallyPrintNumber(i)
+    }
+}
+
+//Al pasar el argumento 'n', ya no puede acceder a 'i' ya que la variable que necesita está en su ámbito léxico.
+printNumbers(); //0 1 2 ... 9
+```
+
+#### Block Scope
+
+Variables definidas dentro de un bloque, por ejemplo variables declaradas dentro un loop `while` o `for`. Se usa `let` y `const` para declarar este tipo de variables.
+
+```js
+function printer(){
+    for(let i = 0; i < 10; i++){
+        setTimeout(() => {
+            console.log(i);
+        },200);
+    }
+}
+//En cada iteración se crea un bloque, y al haber usado let, esta variable solo está disponible en cada bloque
+printer(); //0 1 2 ... 9
+```
+
+#### Module Scope
+
+Cuando se denota un script de tipo module con el atributo `type="module` las variables son limitadas al archivo en el que están declaradas.
+
+```html
+<script type='module' src='./js/index.js'></script>
+```
+
+##### Export Module
+
+La declaración **`export`** se utiliza al crear módulos de JavaScript para exportar funciones, objetos o tipos de dato primitivos del módulo para que puedan ser utilizados por otros programas con la sentencia `import`.
+
+Los módulos exportados están en `strict mode` tanto si se declaran así como si no. La sentencia export no puede ser utilizada en scripts embebidos.
+
+```js
+export { name1, name2, …, nameN };
+export { variable1 as name1, variable2 as name2, …, nameN };
+export let name1, name2, …, nameN; // también var
+export let name1 = …, name2 = …, …, nameN; // también var, const
+export function FunctionName(){...}
+export class ClassName {...}
+
+export default expression;
+export default function (…) { … } // también class, function*
+export default function name1(…) { … } // también class, function*
+export { name1 as default, … };
+
+export * from …;
+export { name1, name2, …, nameN } from …;
+export { import1 as name1, import2 as name2, …, nameN } from …;
+export { default } from …;
+```
+
+##### Import module
+
+La sentencia `import` se usa para importar funciones que han sido exportadas desde un módulo externo.
+
+```js
+import defaultExport from "./js/module-name";
+import * as name from "module-name";
+import { export } from "module-name";
+import { export as alias } from "module-name";
+import { export1 , export2 } from "module-name";
+import { export1 , export2 as alias2 , [...] } from "module-name";
+import defaultExport, { export [ , [...] ] } from "module-name";
+import defaultExport, * as name from "module-name";
+import "module-name";
+```
+
+
+
+### 6. Closures o clausuras
+
+Son funciones que regresan una función o un objeto con funciones que mantienen las variables que fueron declaradas fuera de su scope.
+
+Los **closures** nos sirven para tener algo parecido a variables privadas, característica que no tiene JavaScript por *default*. Es decir encapsulan variables que no pueden ser modificadas directamente por otros objetos, sólo por funciones pertenecientes al mismo.
 
 ### 7. El primer plugin
 
