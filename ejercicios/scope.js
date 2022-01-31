@@ -69,7 +69,7 @@ showNumbers(); //0 1 2 ... 9
 /*
 Al declarar la variable i con LET, en cada iteración se genera un
 bloque, por lo que i al tener alcance de bloque, el código dentro del bloque no puede acceder a las nuevas asignaciones de i.
-Por lo que el setTimeout de imprimir el valor de i de cada iteración, 
+Por lo que el setTimeout de imprimir el valor de i de cada iteración,
 hasta que se deje de cumplir la condición.
 */
 

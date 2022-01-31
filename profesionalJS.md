@@ -363,13 +363,108 @@ import defaultExport, * as name from "module-name";
 import "module-name";
 ```
 
-
-
 ### 6. Closures o clausuras
 
 Son funciones que regresan una función o un objeto con funciones que mantienen las variables que fueron declaradas fuera de su scope.
 
 Los **closures** nos sirven para tener algo parecido a variables privadas, característica que no tiene JavaScript por *default*. Es decir encapsulan variables que no pueden ser modificadas directamente por otros objetos, sólo por funciones pertenecientes al mismo.
+
+#### IIFE: Immediately Invoked Function Expresion
+
+Las **expresiones de función ejecutadas inmediatamente** (**IIFE** por su sigla en inglés) son funciones que se ejecutan tan pronto como se definen.
+
+**Sintaxis**:
+
+```js
+(function () {
+    //statements
+})();
+```
+
+Es un patrón de diseño también conocido cómo **función autoejecutable** y se compone por dos partes. La primera es la función anónima con alcance léxico encerrado por el *Operador de Agrupación* `()`. Esto impide accesar variables fuera del IIFE, así cómo contaminar el alcance (scope) global. 
+
+La segunda parte crea la expresión de función cuya ejecución es inmediata `()`, siendo interpretado directamente en el engine de JavaScript.
+
+*La función se convierte en una expresión de función que es ejecutada inmediatamente. La variable dentro de la expresíon no puede ser accesada desde afuera.*
+
+```js
+(function (){
+    var name = 'Tim';
+})();
+
+console.log(name); //name is not defined
+```
+
+*Asignar el IIFE a una variable almacena el valor de retorno, no la definición de la función.*
+
+```js
+var printer = function (){
+    let color = 'red';
+    return color;}
+
+printer;
+//printer retorna la definición de la función
+/* ƒ (){
+        let color = 'red';
+        return color;}
+*/
+
+//USANDO IIFE
+var result = (function (){
+    let name = 'Tim';
+    return name;
+})();
+
+result; //Tim
+```
+
+#### Funciones que retornan funciones
+
+También son *Clausuras* porque no se puede acceder directamente a las variables definidas dentro de la función principal. Para acceder a estas variables solo se puede hacer mediante la función de retorno ya que esta recuerda el ámbito en la que fue definida.
+
+```js
+function makeColorPrinter(color){
+    let colorMessage = `The color is ${color}`;
+    return function(){
+        console.log(colorMessage);
+    }
+}
+
+let greenColorPrinter = makeColorPrinter('green');
+greenColorPrinter(); //The color is green
+greenColorPrinter(); //The color is green
+```
+
+#### Variables privadas
+
+Con las clausuras se puede crear variables privadas, las cuales solo se puede tener acceso mediante los métodos definidos a través de funciones, pues estas recuerdan el ámbito léxico en la que fueron definidas.
+
+```js
+function makeCounter (n) {
+    let count = n;
+    return {
+        increse: function(){
+            count = count + 1;
+        },
+        decrease: function(){
+            count = count - 1;
+        },
+        getCount: function(){
+            return count;
+        },
+    };
+}
+
+let counter = makeCounter(10);
+console.log(`Count is : ${counter.getCount()}`); //10
+counter.increse();
+console.log(`Count is : ${counter.getCount()}`); //11
+counter.decrease();
+console.log(`Count is : ${counter.getCount()}`); // 10
+counter.decrease();
+counter.decrease();
+console.log(`Count is : ${counter.getCount()}`); //8
+```
 
 ### 7. El primer plugin
 
