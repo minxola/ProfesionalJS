@@ -468,6 +468,8 @@ console.log(`Count is : ${counter.getCount()}`); //8
 
 ### 7. El primer plugin
 
+Para el primer plugin se implementó el autoplay y el botón de mute y unmute.
+
 ### 8. this
 
 ### 9. Los métodos call, apply y bind
